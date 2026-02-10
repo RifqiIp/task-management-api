@@ -12,10 +12,20 @@ const createTask = async ({ title, description, status }) => {
   return result.rows[0];
 };
 
-const getAllTasks = async () => {
-  const result = await db.query(`SELECT * FROM tasks ORDER BY created_at DESC`);
+const getAllTasks = async (status) => {
+  if (status) {
+    const result = await db.query(
+      "SELECT * FROM tasks WHERE status = $1 ORDER BY created_at DESC",
+      [status],
+    );
+    return result.rows;
+  }
+
+  const result = await db.query("SELECT * FROM tasks ORDER BY created_at DESC");
+
   return result.rows;
 };
+
 
 const getTaskById = async (id) => {
   const result = await db.query(`SELECT * FROM tasks WHERE id = $1`, [id]);
@@ -41,7 +51,11 @@ const updateTask = async (id, { title, description, status }) => {
 };
 
 const deleteTask = async (id) => {
-  await db.query(`DELETE FROM tasks WHERE id = $1`, [id]);
+  const result = await db.query(`DELETE FROM tasks WHERE id = $1 RETURNING *`, [
+    id,
+  ]);
+
+  return result.rows[0];
 };
 
 module.exports = {

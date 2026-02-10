@@ -14,8 +14,12 @@ const createTask = async (data) => {
   return taskRepo.createTask(data);
 };
 
-const getTasks = async () => {
-  return taskRepo.getAllTasks();
+const getTasks = async (status) => {
+  if (status && !VALID_STATUS.includes(status)) {
+    throw new Error("Status tidak valid");
+  }
+
+  return await taskRepo.getAllTasks(status);
 };
 
 const updateTask = async (id, data) => {
@@ -32,4 +36,12 @@ const updateTask = async (id, data) => {
   return updatedTask;
 };
 
-module.exports = { createTask, updateTask, getTasks };
+const deleteTask = async (id) => {
+  const task = await taskRepo.deleteTask(id);
+
+  if (!task) throw new Error("Task not found");
+
+  return task;
+};
+
+module.exports = { createTask, updateTask, getTasks, deleteTask };

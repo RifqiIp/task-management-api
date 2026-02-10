@@ -10,8 +10,21 @@ const createTask = async (req, res) => {
 };
 
 const getTasks = async (req, res) => {
-  const tasks = await taskService.getTasks();
-  res.json(tasks);
+  try {
+    const { status } = req.query;
+
+    const tasks = await taskService.getTasks(status);
+
+    res.status(200).json({
+      success: true,
+      data: tasks,
+    });
+  } catch (err) {
+    res.status(400).json({
+      success: false,
+      message: err.message,
+    });
+  }
 };
 
 const updateTask = async (req, res) => {
@@ -28,4 +41,17 @@ const updateTask = async (req, res) => {
   }
 };
 
-module.exports = { createTask, getTasks, updateTask };
+const deleteTask = async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    const task = await taskService.deleteTask(id);
+    res.status(200).json({ success: true, data: task });
+  } catch (err) {
+    res.status(400).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
+module.exports = { createTask, getTasks, updateTask, deleteTask };

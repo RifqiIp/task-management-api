@@ -3,7 +3,7 @@ const app = express();
 const taskRoutes = require("./routes/task.route");
 
 app.use(express.json());
-app.use(taskRoutes);
+app.use("/tasks", taskRoutes);
 
 app.get("/health", (req, res) => {
   res.json({ status: "OK" });
