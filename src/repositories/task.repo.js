@@ -12,19 +12,39 @@ const createTask = async ({ title, description, status }) => {
   return result.rows[0];
 };
 
-const getAllTasks = async (status) => {
+const getAllTasks = async ({ status, page, limit }) => {
+  const offset = (page - 1) * limit;
+
+  let query = "SELECT * FROM tasks";
+  let countQuery = "SELECT COUNT(*) FROM tasks";
+  let params = [];
+
   if (status) {
-    const result = await db.query(
-      "SELECT * FROM tasks WHERE status = $1 ORDER BY created_at DESC",
-      [status],
-    );
-    return result.rows;
+    query += " WHERE status = $1";
+    countQuery += " WHERE status = $1";
+    params.push(status);
   }
 
-  const result = await db.query("SELECT * FROM tasks ORDER BY created_at DESC");
+  query += " ORDER BY created_at DESC LIMIT $2 OFFSET $3";
+  params.push(limit, offset);
 
-  return result.rows;
+  const dataResult = await db.query(query, params);
+  const countResult = await db.query(countQuery, status ? [status] : []);
+
+  const totalItems = Number(countResult.rows[0].count);
+  const totalPages = Math.ceil(totalItems / limit);
+
+  return {
+    data: dataResult.rows,
+    pagination: {
+      page,
+      limit,
+      totalItems,
+      totalPages,
+    },
+  };
 };
+
 
 
 const getTaskById = async (id) => {

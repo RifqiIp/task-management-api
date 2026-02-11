@@ -14,11 +14,14 @@ const createTask = async (data) => {
   return taskRepo.createTask(data);
 };
 
-const getTasks = async (status) => {
+const getTasks = async ({ status, page, limit }) => {
   if (status && !VALID_STATUS.includes(status)) {
     throw new Error("Status tidak valid");
   }
-
+  if (page < 1 || limit < 1) {
+    throw new Error("Page dan limit harus lebih dari 0");
+  }
+  
   return await taskRepo.getAllTasks(status);
 };
 

@@ -11,9 +11,13 @@ const createTask = async (req, res) => {
 
 const getTasks = async (req, res) => {
   try {
-    const { status } = req.query;
+    const { status, page = 1, limit = 10 } = req.query;
 
-    const tasks = await taskService.getTasks(status);
+    const tasks = await taskService.getTasks({
+      status,
+      page: Number(page),
+      limit: Number(limit),
+    });
 
     res.status(200).json({
       success: true,
