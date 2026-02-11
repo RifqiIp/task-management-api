@@ -53,16 +53,24 @@ Membangun REST API untuk manajemen Task dengan fitur utama:
 
 ## 🗄️ Database Schema
 
+
+```sql
+CREATE TYPE task_status AS ENUM ('todo', 'in_progress', 'done');
+```
+
+### Table
+
 ```sql
 CREATE TABLE tasks (
   id SERIAL PRIMARY KEY,
   title TEXT NOT NULL,
   description TEXT,
-  status VARCHAR(20) NOT NULL DEFAULT 'todo',
+  status task_status NOT NULL DEFAULT 'todo',
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 ```
+
 
 Status yang tersedia:
 - `todo`
@@ -171,4 +179,4 @@ Controller → Service → Repository → Database
 
 ## 👤 Author
 
-Backend Learning Project
+Rifqi Pratama
