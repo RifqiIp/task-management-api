@@ -1,156 +1,174 @@
 # Task Management API
 
----
-
-## Tech Stack
-
-* Node.js
-* Express.js
-* PostgreSQL
-* dotenv
+REST API sederhana untuk manajemen Task menggunakan **Node.js**, **Express**, dan **PostgreSQL**.  
+Project ini dibuat sebagai latihan dan technical test dengan fokus pada **clean code**, **struktur project yang rapi**, dan **konsep backend dasar**.
 
 ---
 
-## Project Structure
+## 🎯 Objective
+
+Membangun REST API untuk manajemen Task dengan fitur utama:
+- CRUD Task
+- Filter dan pagination
+- Validasi input & error handling
+- Struktur project yang konsisten
+
+---
+
+## 🛠️ Tech Stack
+
+- Node.js
+- Express.js
+- PostgreSQL
+- pg (node-postgres)
+- dotenv
+
+---
+
+## 📁 Struktur Project
 
 ```
-src/
- ├─ routes/
- │   └─ task.route.js
- ├─ controllers/
- │   └─ task.controller.js
- ├─ services/
- │   └─ task.service.js
- ├─ repositories/
- │   └─ task.repo.js
- ├─ config/
- │   └─ db.js
- ├─ app.js
- └─ server.js
+.
+├── databases
+│   └── task-management.sql
+├── src
+│   ├── config
+│   │   └── db.js
+│   ├── controllers
+│   │   └── task.controller.js
+│   ├── repositories
+│   │   └── task.repo.js
+│   ├── routes
+│   │   └── task.route.js
+│   ├── services
+│   │   └── task.service.js
+│   ├── app.js
+│   └── server.js
+├── .env
+├── package.json
+└── README.md
 ```
 
 ---
 
-## Database Schema
-
-### Enum
-
-```sql
-CREATE TYPE task_status AS ENUM ('todo', 'in_progress', 'done');
-```
-
-### Table
+## 🗄️ Database Schema
 
 ```sql
 CREATE TABLE tasks (
   id SERIAL PRIMARY KEY,
   title TEXT NOT NULL,
   description TEXT,
-  status task_status NOT NULL DEFAULT 'todo',
+  status VARCHAR(20) NOT NULL DEFAULT 'todo',
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 ```
 
+Status yang tersedia:
+- `todo`
+- `in_progress`
+- `done`
+
 ---
 
-## Environment Variables
+## ⚙️ Environment Variable
 
 Buat file `.env` di root project:
 
-```
+```env
+PORT=3000
 DB_HOST=localhost
 DB_PORT=5432
 DB_USER=postgres
-DB_PASSWORD=your_password
-DB_NAME=task_db
-PORT=3000
+DB_PASSWORD=password_anda
+DB_NAME=task_management
 ```
 
 ---
 
-## How to Run
+## 🚀 Cara Menjalankan Aplikasi
 
+1. Install dependency
 ```bash
 npm install
-node src/server.js
 ```
 
-Server akan berjalan di:
+2. Setup database
+- Buat database PostgreSQL
+- Jalankan file SQL di folder `databases/task-management.sql`
 
-```
-http://localhost:3000
+3. Jalankan server
+```bash
+npm start
 ```
 
 ---
 
-## API Endpoints
+## 📌 Endpoint API
 
 ### Create Task
-
-**POST /tasks**
+POST `/tasks`
 
 ```json
 {
   "title": "Belajar Backend",
-  "description": "Node.js dan PostgreSQL",
+  "description": "Belajar Node.js",
   "status": "todo"
 }
 ```
 
 ---
 
-### Get All Tasks
+### Get Tasks (Filter & Pagination)
+GET `/tasks`
 
-**GET /tasks**
+Query Params:
+- `status` (opsional)
+- `page` (default: 1)
+- `limit` (default: 10)
 
-Optional filter:
-
+Contoh:
 ```
-GET /tasks?status=done
+/tasks?status=todo&page=1&limit=5
 ```
 
 ---
 
-### Get Task by ID
-
-**GET /tasks/:id**
+### Get Task Detail
+GET `/tasks/:id`
 
 ---
 
-### Update Task (Partial)
-
-**PUT /tasks/:id**
+### Update Task
+PUT `/tasks/:id`
 
 ```json
 {
-  "status": "in_progress"
+  "status": "done"
 }
 ```
 
 ---
 
 ### Delete Task
-
-**DELETE /tasks/:id**
-
----
-
-## Error Handling
-
-* `400 Bad Request` → validasi gagal
-* `404 Not Found` → task tidak ditemukan
+DELETE `/tasks/:id`
 
 ---
 
-## Notes
+## 🧠 Arsitektur
 
-* Menggunakan layered architecture (Route → Controller → Service → Repository)
-* Validasi dilakukan di service layer
-* Repository hanya berisi query SQL
+Controller → Service → Repository → Database
 
 ---
 
-## Author
+## ✨ Next Improvement
 
-Rifqi Pratama
+- Authentication
+- Unit test
+- Docker
+
+---
+
+## 👤 Author
+
+Backend Learning Project
