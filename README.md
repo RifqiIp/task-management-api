@@ -53,6 +53,7 @@ Membangun REST API untuk manajemen Task dengan fitur utama:
 
 ## 🗄️ Database Schema
 
+### ENUM
 
 ```sql
 CREATE TYPE task_status AS ENUM ('todo', 'in_progress', 'done');
