@@ -128,7 +128,7 @@ POST `/tasks`
 
 ---
 
-### Get Tasks (Filter & Pagination)
+### Get All Tasks (Filter & Pagination)
 GET `/tasks`
 
 Query Params:
